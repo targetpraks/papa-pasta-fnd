@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import Crest from "@/components/Crest";
-import LeadHud from "@/components/LeadHud";
 
 const heroHeads = {
   colour: <><>The colour in your city<br/><em className="text-[#C97B2A] not-italic font-medium">hasn't been claimed yet.</em></></>,
@@ -37,8 +36,6 @@ export default function HomePage() {
 
   return (
     <>
-      <LeadHud score={0} />
-      
       {/* HERO */}
       <section className="relative py-16 md:py-24 overflow-hidden">
         <div className="max-w-[1280px] mx-auto px-6 grid lg:grid-cols-[1.15fr_1fr] gap-16 items-center">
