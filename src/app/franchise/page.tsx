@@ -52,6 +52,17 @@ export default function FranchisePage() {
             </div>
           </div>
 
+
+          <div className="mb-12">
+            <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(10,22,40,0.56)] mb-6">Store concepts</div>
+            <h3 className="font-[family-name:var(--font-playfair)] font-bold text-2xl mb-4">Visual concepts for 40sqm inline units.</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {["store-concept-refined-neon-pop","store-concept-1-cyberpunk-neon","store-concept-2-tron-legacy","store-concept-3-gaming-arena","store-concept-4-neon-tokyo","store-concept-5-pop-art-neon"].map((name) => (
+                <Image key={name} src={`https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/${name}.png`} alt={name.replace(/-/g," ")} width={400} height={300} className="w-full rounded-xl border border-[rgba(10,22,40,0.08)] object-cover" />
+              ))}
+            </div>
+          </div>
+
           <div className="bg-[#0A1628] text-[#F5E6C8] rounded-2xl p-6 md:p-10 mb-12">
             <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.5)] mb-4">12-month unit projection</div>
             <h3 className="font-[family-name:var(--font-playfair)] font-bold text-xl mb-8">Revenue climbs. Costs flatten. Payback around month 11.</h3>

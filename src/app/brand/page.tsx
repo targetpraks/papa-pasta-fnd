@@ -101,6 +101,28 @@ export default function BrandPage() {
           </div>
         </div>
       </section>
+
+      <section className="py-16 md:py-24">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+            <div>
+              <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(10,22,40,0.56)] mb-4">
+                <span className="w-6 h-px bg-current" />03 · Takeovers & Partnerships
+              </div>
+              <h2 className="font-[family-name:var(--font-playfair)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(32px,4vw,64px)] mb-4">
+                When a brand partners with Papa Pasta,<br/><em className="text-[#C97B2A] not-italic font-medium">the whole store changes colour.</em>
+              </h2>
+            </div>
+            <p className="text-sm text-[rgba(10,22,40,0.56)] max-w-[40ch]">From MTN to the Springboks — our takeovers turn a Papa Pasta store into a temporary brand temple. Franchisees benefit from the traffic and the PR.</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {["takeover-mtn","takeover-nedbank","takeover-vodacom","takeover-springboks"].map((name) => (
+              <Image key={name} src={`https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/${name}.png`} alt={name.replace(/-/g," ")} width={400} height={300} className="w-full rounded-xl border border-[rgba(10,22,40,0.08)] object-cover" />
+            ))}
+          </div>
+        </div>
+      </section>
+
     </>
   );
 }

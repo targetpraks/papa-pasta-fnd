@@ -159,6 +159,29 @@ export default function HomePage() {
         </div>
       </section>
 
+
+      {/* Franchisee Identity Showcase */}
+      <section className="py-10">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <SectionReveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+              <div>
+                <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(10,22,40,0.56)] mb-4">
+                  <span className="w-6 h-px bg-current" />Living Crest in the wild
+                </div>
+                <h3 className="font-[family-name:var(--font-playfair)] font-bold text-2xl">Every franchisee gets a unique identity.</h3>
+              </div>
+              <p className="text-sm text-[rgba(10,22,40,0.56)] max-w-[40ch]">Not a template. Not a Canva download. A full brand system generated from the crest you create.</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {[1,2,3,4,5].map((n) => (
+                <Image key={n} src={`https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/franchisee-logos-batch-${n}.png`} alt={`Franchisee logo batch ${n}`} width={300} height={300} className="w-full rounded-xl border border-[rgba(10,22,40,0.08)] object-cover bg-white" />
+              ))}
+            </div>
+          </SectionReveal>
+        </div>
+      </section>
+
       {/* 6-step journey */}
       <section className="py-20 md:py-28 bg-[#0A1628] text-[#F5E6C8]">
         <div className="max-w-[1280px] mx-auto px-6">
@@ -199,6 +222,29 @@ export default function HomePage() {
               <Image src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/colour-story-colour-reveal.png" alt="Colour reveal" width={400} height={300} className="w-full rounded-2xl border border-[rgba(10,22,40,0.08)] object-cover" />
               <Image src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/colour-story-zone-map.png" alt="Zone map" width={400} height={300} className="w-full rounded-2xl border border-[rgba(10,22,40,0.08)] object-cover" />
               <Image src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/colour-story-vs-traditional.png" alt="Colour vs traditional" width={400} height={300} className="w-full rounded-2xl border border-[rgba(10,22,40,0.08)] object-cover" />
+            </div>
+          </SectionReveal>
+        </div>
+      </section>
+
+
+      {/* Collectible Bowl Series */}
+      <section className="py-10">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <SectionReveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+              <div>
+                <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(10,22,40,0.56)] mb-4">
+                  <span className="w-6 h-px bg-current" />Collectible Bowl Series
+                </div>
+                <h3 className="font-[family-name:var(--font-playfair)] font-bold text-2xl">Ten bowl stories. One brand.</h3>
+              </div>
+              <p className="text-sm text-[rgba(10,22,40,0.56)] max-w-[40ch]">Each franchisee gets a founding crest bowl. Seasonal drops, city editions, and collaboration series follow.</p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {["bowl-01-founding-crest","bowl-02-franchisee-colour-drops","bowl-03-sa-heritage-series","bowl-04-neon-gamer-series","bowl-05-takeover-partner-bowls","bowl-06-local-artist-collab","bowl-07-seasonal-harvest","bowl-08-city-edition","bowl-09-glow-in-dark","bowl-10-rugby-sports-edition"].map((name) => (
+                <Image key={name} src={`https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/${name}.png`} alt={name.replace(/-/g," ")} width={300} height={300} className="w-full rounded-xl border border-[rgba(10,22,40,0.08)] object-cover bg-white" />
+              ))}
             </div>
           </SectionReveal>
         </div>
