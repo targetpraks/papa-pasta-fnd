@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { CrestMini } from "@/components/Crest";
 import { seasons } from "@/lib/data";
 
@@ -28,6 +29,7 @@ export default function Nav() {
   const pathname = usePathname() ?? "/";
   const [seasonKey, setSeasonKey] = useState(getCurrentSeasonKey());
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     setSeasonKey(getCurrentSeasonKey());
@@ -72,7 +74,27 @@ export default function Nav() {
               Create Your Crest
             </Link>
           </nav>
+
+          <button className="lg:hidden ml-auto p-2" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle menu">
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        {mobileOpen && (
+          <div className="lg:hidden bg-white border-b border-[rgba(10,22,40,0.12)] px-6 py-4 flex flex-col gap-2 shadow-lg">
+            {navLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setMobileOpen(false)}
+                className={`px-4 py-3 rounded-xl text-sm font-medium ${pathname === l.href ? "bg-[rgba(10,22,40,0.08)] text-[#0A1628]" : "text-[rgba(10,22,40,0.56)]"}`}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <Link href="/create/" onClick={() => setMobileOpen(false)} className="mt-2 bg-[#0A1628] text-white text-center px-4 py-3 rounded-full text-sm font-semibold">Create Your Crest</Link>
+          </div>
+        )}
       </div>
     </header>
   );
