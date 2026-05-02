@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Papa Pasta FND — Franchise Network Development
 
-## Getting Started
+**The Living Crest™ franchise recruitment platform for South Africa.**
 
-First, run the development server:
+Live: https://targetpraks.github.io/papa-pasta-fnd (enable GitHub Actions Pages in repo settings)
+
+---
+
+## What it is
+
+Papa Pasta is not a restaurant website. It is a **franchise recruitment weapon** disguised as a beautiful brand experience.
+
+Every pixel exists to convert a curious visitor into a territory lead. The site's core differentiator — **The Living Crest™** — is an interactive SVG crest that changes colour based on season, city, or user creation. Visitors don't browse a menu; they discover that the colour in their city hasn't been claimed yet, and they can create their own.
+
+## Pages (8 total)
+
+| Page | Route | Purpose |
+|------|-------|---------|
+| **Home** | `/` | Hero, stats, value prop, 6-step journey, CTA band |
+| **Step 0** | `/create/` | Lead capture (name/email/phone) *before* the Creator game |
+| **Crest Creator** | `/create/` | 3 HSL pickers + live SVG preview + context switcher + Realisation Moment™ |
+| **Brand Story** | `/brand/` | The pasta. The colour. The territory. |
+| **Express Interest** | `/interest/` | SA territory map (SVG), territory list, lead capture per territory |
+| **Franchise** | `/franchise/` | Investment model, ROI chart, full application form |
+| **Community Gallery** | `/gallery/` | Top 10/50, Trending, Newest, A–Z with voting |
+| **Curated Picks** | `/seasonal/` | 20 head-office picks + season preview |
+| **Realisation Moment** | Modal | See your crest on bag / cup / storefront mockups |
+
+## Tech Stack
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS v4 + CSS custom properties
+- Framer Motion (scroll animations + page transitions)
+- Google Fonts: Playfair Display, Inter, JetBrains Mono
+- Static export → GitHub Pages via GitHub Actions
+
+## Brand System
+
+| Token | Value |
+|-------|-------|
+| Navy | `#0A1628` |
+| Gold | `#D4A017` |
+| Cream | `#F5E6C8` |
+| Serif | Playfair Display |
+| Sans | Inter |
+| Mono | JetBrains Mono |
+
+## Lead Scoring
+
+A globally shared context tracks engagement across pages:
+
+| Action | Points |
+|--------|--------|
+| Step 0 submitted (name/email) | +10 |
+| Creates a crest | +10 |
+| Names their crest | +5 |
+| Views Realisation Moment | +5 |
+| Selects a territory | +10 |
+| Expresses interest / waitlist | +10 |
+| Submits full application | +20 |
+| **Max** | **85** |
+
+Tiers: **Hot** (80+) · **Warm** (60–79) · **Nurture** (40–59) · **New**
+
+## Images
+
+All real brand images are served from the companion repo:
+[`targetpraks/papa-pasta-assets`](https://github.com/targetpraks/papa-pasta-assets)
+
+## Run locally
 
 ```bash
+git clone https://github.com/targetpraks/papa-pasta-fnd.git
+cd papa-pasta-fnd
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build for static export
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+# output: ./dist (configured in next.config.ts)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
+GitHub Actions (`.github/workflows/deploy.yml`) builds and deploys to GitHub Pages on every push to `main`.
 
-To learn more about Next.js, take a look at the following resources:
+To enable:  
+Repo → Settings → Pages → Source → **GitHub Actions**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**© 2026 Papa Pasta · Infinity Brands**
