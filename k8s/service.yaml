@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: papa-pasta-fnd
+  namespace: fnd
+spec:
+  selector:
+    app: papa-pasta-fnd
+  ports:
+    - port: 80
+      targetPort: 80

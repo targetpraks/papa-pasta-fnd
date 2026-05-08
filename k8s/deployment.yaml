@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: papa-pasta-fnd
+  namespace: fnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: papa-pasta-fnd
+  template:
+    metadata:
+      labels:
+        app: papa-pasta-fnd
+    spec:
+      containers:
+        - name: papa-pasta-fnd
+          image: papa-pasta-fnd:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
