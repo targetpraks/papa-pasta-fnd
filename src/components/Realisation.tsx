@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Crest from "./Crest";
+import { Button } from "@/components/ui/Button";
 
 interface CrestState {
   bg: { hex: string };
@@ -18,12 +19,17 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
 
   return (
     <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[rgba(10,22,40,0.92)] backdrop-blur-md p-6 overflow-y-auto">
-      <button onClick={onClose} className="absolute top-6 right-6 text-[#F5E6C8] text-sm font-medium hover:underline">Close ✕</button>
+      <button
+        onClick={onClose}
+        className="absolute top-6 right-6 text-[color:var(--color-pp-cream)] text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-pp-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(10,22,40,0.92)] rounded"
+      >
+        Close ✕
+      </button>
 
       <div className="text-center mb-6">
         <div className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.6)] mb-3">The Realisation Moment™</div>
-        <h2 className="font-[family-name:var(--font-playfair)] font-extrabold text-3xl md:text-4xl text-[#F5E6C8]">
-          This is <em className="text-[#D4A017] not-italic font-medium">{nm}</em>.
+        <h2 className="font-[family-name:var(--font-playfair)] font-extrabold text-3xl md:text-4xl text-[color:var(--color-pp-cream)]">
+          This is <em className="text-[color:var(--color-pp-gold)] not-italic font-medium">{nm}</em>.
           <br />This is how it shows up.</h2>
       </div>
 
@@ -65,11 +71,14 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Link href="/interest/" className="inline-flex items-center gap-2.5 bg-[#D4A017] text-[#0A1628] px-6 py-3.5 rounded-full text-sm font-semibold hover:brightness-105 transition-all">
-          Express interest in a territory →
+        <Link href="/interest/">
+          <Button className="bg-[color:var(--color-pp-gold)] text-[color:var(--color-pp-navy)] hover:brightness-105 hover:shadow-none hover:translate-y-0">
+            Express interest in a territory →
+          </Button>
         </Link>
-        <button onClick={onClose} className="inline-flex items-center gap-2.5 border border-[rgba(245,230,200,0.3)] text-[#F5E6C8] px-6 py-3.5 rounded-full text-sm font-semibold hover:bg-[rgba(245,230,200,0.05)] transition-all">
-          Keep tweaking</button>
+        <Button variant="inverted" onClick={onClose}>
+          Keep tweaking
+        </Button>
       </div>
     </div>
   );

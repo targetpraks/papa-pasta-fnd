@@ -3,13 +3,15 @@
 import Link from "next/link";
 import { useState } from "react";
 import { CrestMini } from "@/components/Crest";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Field";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
 
   return (
-    <footer className="bg-[#0A1628] text-[#F5E6C8]">
+    <footer className="bg-[color:var(--color-pp-navy)] text-[color:var(--color-pp-cream)]">
       <div className="max-w-[1400px] mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="lg:col-span-1">
@@ -25,20 +27,20 @@ export default function Footer() {
           <div>
             <h5 className="font-[family-name:var(--font-playfair)] font-bold text-lg mb-5">Pages</h5>
             <ul className="space-y-2.5 text-sm text-[rgba(245,230,200,0.7)]">
-              <li><Link href="/" className="hover:text-[#F5E6C8] transition-colors">Home</Link></li>
-              <li><Link href="/create/" className="hover:text-[#F5E6C8] transition-colors">Crest Creator</Link></li>
-              <li><Link href="/brand/" className="hover:text-[#F5E6C8] transition-colors">Brand Story</Link></li>
-              <li><Link href="/seasonal/" className="hover:text-[#F5E6C8] transition-colors">Curated Picks</Link></li>
+              <li><Link href="/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Home</Link></li>
+              <li><Link href="/create/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Crest Creator</Link></li>
+              <li><Link href="/brand/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Brand Story</Link></li>
+              <li><Link href="/seasonal/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Curated Picks</Link></li>
             </ul>
           </div>
 
           <div>
             <h5 className="font-[family-name:var(--font-playfair)] font-bold text-lg mb-5">Franchise</h5>
             <ul className="space-y-2.5 text-sm text-[rgba(245,230,200,0.7)]">
-              <li><Link href="/interest/" className="hover:text-[#F5E6C8] transition-colors">Territory Map</Link></li>
-              <li><Link href="/franchise/" className="hover:text-[#F5E6C8] transition-colors">The Model</Link></li>
-              <li><Link href="/franchise/" className="hover:text-[#F5E6C8] transition-colors">Apply</Link></li>
-              <li><Link href="/gallery/" className="hover:text-[#F5E6C8] transition-colors">Community Gallery</Link></li>
+              <li><Link href="/interest/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Territory Map</Link></li>
+              <li><Link href="/franchise/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">The Model</Link></li>
+              <li><Link href="/franchise/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Apply</Link></li>
+              <li><Link href="/gallery/" className="hover:text-[color:var(--color-pp-cream)] transition-colors">Community Gallery</Link></li>
             </ul>
           </div>
 
@@ -54,20 +56,17 @@ export default function Footer() {
               }}
               className="flex flex-col gap-2"
             >
-              <input
+              <Input
                 type="email"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); setMsg(""); }}
                 placeholder="your@email.com"
-                className="w-full px-4 py-2.5 bg-[rgba(245,230,200,0.08)] border border-[rgba(245,230,200,0.15)] rounded-full text-sm text-[#F5E6C8] placeholder:text-[rgba(245,230,200,0.4)] focus:outline-none focus:border-[#D4A017]"
+                className="rounded-full px-4 py-2.5 bg-[rgba(245,230,200,0.08)] border border-[rgba(245,230,200,0.15)] text-[color:var(--color-pp-cream)] placeholder:text-[rgba(245,230,200,0.4)] focus-visible:ring-offset-[color:var(--color-pp-navy)]"
               />
-              {msg && <span className="text-xs text-[#D4A017]">{msg}</span>}
-              <button
-                type="submit"
-                className="w-full px-4 py-2.5 bg-[#D4A017] text-[#0A1628] rounded-full text-sm font-semibold hover:brightness-105 transition-all"
-              >
+              {msg && <span className="text-xs text-[color:var(--color-pp-gold)]">{msg}</span>}
+              <Button type="submit" className="w-full bg-[color:var(--color-pp-gold)] text-[color:var(--color-pp-navy)] hover:brightness-105 hover:shadow-none hover:translate-y-0">
                 Subscribe
-              </button>
+              </Button>
             </form>
           </div>
         </div>
