@@ -3,7 +3,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const baseControl =
-  "w-full rounded-lg border border-[rgba(10,22,40,0.12)] bg-white text-sm px-4 py-3 placeholder:text-[rgba(10,22,40,0.36)] focus:outline-none focus:border-[color:var(--color-pp-gold)] focus-visible:ring-2 focus-visible:ring-[color:var(--color-pp-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:opacity-50 disabled:pointer-events-none";
+  "w-full rounded-lg border border-[color:var(--color-pp-line)] bg-[color:var(--color-pp-white)] text-sm px-4 py-3 placeholder:text-[color:var(--color-pp-mute)] focus:outline-none focus:border-[color:var(--color-pp-tertiary)] focus-visible:ring-2 focus-visible:ring-[color:var(--color-pp-tertiary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-pp-white)] disabled:opacity-50 disabled:pointer-events-none";
 
 export function Label(props: React.LabelHTMLAttributes<HTMLLabelElement>) {
   return <label {...props} className={cn("block text-sm font-medium", props.className)} />;
@@ -33,6 +33,6 @@ export function Checkbox({
   className,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & { className?: string }) {
-  return <input type="checkbox" {...props} className={cn("mt-0.5 accent-[color:var(--color-pp-gold)]", className)} />;
+  return <input type="checkbox" {...props} className={cn("mt-0.5 accent-[color:var(--color-pp-tertiary)]", className)} />;
 }
 

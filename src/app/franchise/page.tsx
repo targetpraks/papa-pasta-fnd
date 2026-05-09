@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Users, Ruler, Clock, Check } from "lucide-react";
@@ -11,17 +11,22 @@ export default function FranchisePage() {
   const { addPoints } = useLeadScore();
   const [form, setForm] = useState({ fname: "", lname: "", email: "", phone: "", city: "", capital: "", experience: "", timeline: "", why: "", consent: false });
   const [done, setDone] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const months = Array.from({ length: 12 }, (_, i) => i);
   const revenue = months.map((m) => Math.round(140 + m * 22 + (m > 3 ? 40 : 0)));
   const maxVal = Math.max(...revenue);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (!form.consent) return;
-    setDone(true);
-    addPoints(20);
-  };
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setDone(true);
+      addPoints(20);
+      setIsSubmitting(false);
+    }, 800);
+  }, [form, addPoints]);
 
   return (
     <>
@@ -32,7 +37,7 @@ export default function FranchisePage() {
             <div className="flex flex-col lg:flex-row lg:items-end gap-8">
               <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)]">
                 Franchise<br />
-                <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">opportunity.</em>
+                <span className="text-[color:var(--color-pp-accent)] font-medium">opportunity.</span>
               </h1>
               <p className="text-[19px] text-[color:var(--color-pp-mute)] max-w-[440px]">
                 A premium QSR built for 40sqm inline boxes. Two operators, honest food, one crest per city. Final figures pending finance review.
@@ -134,21 +139,21 @@ export default function FranchisePage() {
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-8">
                   <div className="kicker mb-4">Application received</div>
                   <h3 className="font-[family-name:var(--font-serif)] text-2xl mb-2">
-                    Reference <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">#APP-{Math.floor(Math.random() * 90000 + 10000)}</em>
+                    Reference <span className="text-[color:var(--color-pp-accent)] font-medium">#APP-{Math.floor(Date.now() / 1000)}</span>
                   </h3>
                   <p className="text-sm text-[color:var(--color-pp-mute)]">We'll be in touch within two business days. Your lead score just jumped +20.</p>
                 </motion.div>
               ) : (
-                <form onSubmit={onSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid sm:grid-cols-2 gap-4">
-                    <input required placeholder="First name" value={form.fname} onChange={(e) => setForm({ ...form, fname: e.target.value })} />
-                    <input required placeholder="Last name" value={form.lname} onChange={(e) => setForm({ ...form, lname: e.target.value })} />
+                    <input required placeholder="First name" aria-label="First name" value={form.fname} onChange={(e) => setForm({ ...form, fname: e.target.value })} />
+                    <input required placeholder="Last name" aria-label="Last name" value={form.lname} onChange={(e) => setForm({ ...form, lname: e.target.value })} />
                   </div>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    <input required type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                    <input required type="tel" placeholder="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                    <input required type="email" placeholder="Email" aria-label="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                    <input required type="tel" placeholder="Phone" aria-label="Phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
                   </div>
-                  <input placeholder="Preferred city / territory" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
+                  <input placeholder="Preferred city / territory" aria-label="Preferred city" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
                   <div className="grid sm:grid-cols-2 gap-4">
                     <select required value={form.capital} onChange={(e) => setForm({ ...form, capital: e.target.value })}>
                       <option value="">Available capital...</option>
@@ -172,13 +177,17 @@ export default function FranchisePage() {
                     <option>First-time operator</option>
                     <option>Multi-unit franchisee</option>
                   </select>
-                  <textarea rows={3} placeholder="Why Papa Pasta? (optional)" value={form.why} onChange={(e) => setForm({ ...form, why: e.target.value })} />
+                  <textarea rows={3} placeholder="Why Papa Pasta? (optional)" aria-label="Why Papa Pasta?" value={form.why} onChange={(e) => setForm({ ...form, why: e.target.value })} />
                   <label className="flex items-start gap-3 text-xs text-[color:var(--color-pp-mute)]">
                     <input type="checkbox" checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} required className="mt-0.5 accent-[color:var(--color-pp-tertiary)]" />
                     <span>I consent to Papa Pasta processing my application under POPIA. I understand all figures shown are illustrative and not earnings guarantees.</span>
                   </label>
-                  <button type="submit" className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200">
-                    Submit application <ArrowRight className="w-4 h-4" />
+                  <button type="submit" disabled={isSubmitting} className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200 disabled:opacity-60 disabled:translate-y-0 disabled:shadow-none">
+                    {isSubmitting ? "Submitting..." : (
+                      <>
+                        Submit application <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </form>
               )}

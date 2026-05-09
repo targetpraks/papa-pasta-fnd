@@ -6,22 +6,23 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, MapPin, Clock, Ruler } from "lucide-react";
 import Crest from "@/components/Crest";
+import { SectionReveal } from "@/components/ui/Motion";
 
 const heroHeads = {
   colour: (<>
     The colour in your city
     <br />
-    <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">hasn't been claimed yet.</em>
+    <span className="text-[color:var(--color-pp-accent)] font-medium">hasn't been claimed yet.</span>
   </>),
   model: (<>
     2 crew. 40 sqm.
     <br />
-    <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">11-month payback.</em>
+    <span className="text-[color:var(--color-pp-accent)] font-medium">11-month payback.</span>
   </>),
   craft: (<>
     A crest for every city.
     <br />
-    <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">Yours is missing.</em>
+    <span className="text-[color:var(--color-pp-accent)] font-medium">Yours is missing.</span>
   </>),
 };
 type HeroVariant = keyof typeof heroHeads;
@@ -48,18 +49,6 @@ const socialStats = [
   { n: "1", l: "crest per city — yours or someone else's" },
 ];
 
-function SectionReveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay, ease: [0.2, 0.8, 0.2, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 export default function HomePage() {
   const [heroVariant, setHeroVariant] = useState<HeroVariant>("model");
@@ -221,7 +210,7 @@ export default function HomePage() {
                 <h2 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(32px,4.6vw,64px)]">
                   Small box.
                   <br />
-                  <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">Big margin.</em>
+                  <span className="text-[color:var(--color-pp-accent)] font-medium">Big margin.</span>
                 </h2>
               </div>
               <p className="text-[19px] leading-relaxed text-[color:var(--color-pp-mute)] max-w-[52ch]">
@@ -278,6 +267,8 @@ export default function HomePage() {
                 width={600}
                 height={400}
                 className="w-full rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] object-cover"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               <Image
                 src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/central-kitchen-concept.png"
@@ -285,6 +276,8 @@ export default function HomePage() {
                 width={600}
                 height={400}
                 className="w-full rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] object-cover"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </SectionReveal>
@@ -313,6 +306,8 @@ export default function HomePage() {
                   width={300}
                   height={300}
                   className="w-full rounded-[var(--radius-lg)] border border-[color:var(--color-pp-line)] object-cover bg-white"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 50vw, 20vw"
                 />
               ))}
             </div>
@@ -330,9 +325,9 @@ export default function HomePage() {
                 Curious visitor
                 <br />
                 to{" "}
-                <em className="text-[color:var(--color-pp-tertiary)] not-italic font-medium">
+                <span className="text-[color:var(--color-pp-tertiary)] font-medium">
                   signed franchisee.
-                </em>
+                </span>
               </h2>
             </div>
           </SectionReveal>
@@ -395,6 +390,8 @@ export default function HomePage() {
                 width={400}
                 height={300}
                 className="w-full rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] object-cover"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <Image
                 src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/colour-story-zone-map.png"
@@ -402,6 +399,8 @@ export default function HomePage() {
                 width={400}
                 height={300}
                 className="w-full rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] object-cover"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <Image
                 src="https://raw.githubusercontent.com/targetpraks/papa-pasta-assets/main/images/colour-story-vs-traditional.png"
@@ -409,6 +408,8 @@ export default function HomePage() {
                 width={400}
                 height={300}
                 className="w-full rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] object-cover"
+                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
           </SectionReveal>
@@ -448,6 +449,8 @@ export default function HomePage() {
                   width={300}
                   height={300}
                   className="w-full rounded-[var(--radius-lg)] border border-[color:var(--color-pp-line)] object-cover bg-white"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 50vw, 20vw"
                 />
               ))}
             </div>
@@ -463,7 +466,7 @@ export default function HomePage() {
             <h2 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(32px,4.6vw,64px)]">
               Pick the colour.
               <br />
-              <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">Claim the block.</em>
+              <span className="text-[color:var(--color-pp-accent)] font-medium">Claim the block.</span>
             </h2>
             <p className="mt-5 text-[19px] text-[color:var(--color-pp-mute)] max-w-[52ch] mx-auto">
               You don't browse a menu. You discover that the colour in your city hasn't been claimed yet.

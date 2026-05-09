@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { MapPin, Users, Check } from "lucide-react";
@@ -8,29 +8,41 @@ import Crest from "@/components/Crest";
 import { useLeadScore } from "@/components/LeadContext";
 import { territories } from "@/lib/data";
 
-const SA_PATHS: Record<string, { d: string; cx: number; cy: number; abbr: string }> = {
-  "Northern Cape": { d: "m40,150 l100,-20 l30,40 l-10,30 l-40,20 l-100,-25 z", cx: 90, cy: 175, abbr: "NC" },
-  "Western Cape": { d: "m30,200 l70,10 l40,10 l-10,50 l-60,5 l-30,-40 z", cx: 65, cy: 240, abbr: "WC" },
-  "Eastern Cape": { d: "m110,220 l80,-10 l40,20 l-20,30 l-80,10 z", cx: 160, cy: 245, abbr: "EC" },
-  "Free State": { d: "m130,150 l60,-5 l20,30 l-20,20 l-40,15 l-30,-30 z", cx: 165, cy: 175, abbr: "FS" },
-  "KwaZulu-Natal": { d: "m200,150 l40,-5 l30,20 l-10,30 l-40,10 l-20,-30 z", cx: 235, cy: 170, abbr: "KZN" },
-  "Mpumalanga": { d: "m185,110 l55,-5 l25,20 l-15,25 l-50,5 z", cx: 220, cy: 130, abbr: "MP" },
-  "Limpopo": { d: "m150,50 l90,-5 l40,30 l-20,20 l-70,10 l-30,-25 z", cx: 200, cy: 70, abbr: "LP" },
-  "Gauteng": { d: "m160,100 l35,-5 l5,25 l-40,5 z", cx: 180, cy: 112, abbr: "GP" },
-  "North West": { d: "m95,80 l70,10 l15,25 l-30,15 l-45,-10 z", cx: 135, cy: 110, abbr: "NW" },
+const SA_PATHS: Record<string, { d: string; cx: number; cy: number; abbr: string; name: string }> = {
+  "Northern Cape": { d: "m40,150 l100,-20 l30,40 l-10,30 l-40,20 l-100,-25 z", cx: 90, cy: 175, abbr: "NC", name: "Northern Cape" },
+  "Western Cape": { d: "m30,200 l70,10 l40,10 l-10,50 l-60,5 l-30,-40 z", cx: 65, cy: 240, abbr: "WC", name: "Western Cape" },
+  "Eastern Cape": { d: "m110,220 l80,-10 l40,20 l-20,30 l-80,10 z", cx: 160, cy: 245, abbr: "EC", name: "Eastern Cape" },
+  "Free State": { d: "m130,150 l60,-5 l20,30 l-20,20 l-40,15 l-30,-30 z", cx: 165, cy: 175, abbr: "FS", name: "Free State" },
+  "KwaZulu-Natal": { d: "m200,150 l40,-5 l30,20 l-10,30 l-40,10 l-20,-30 z", cx: 235, cy: 170, abbr: "KZN", name: "KwaZulu-Natal" },
+  "Mpumalanga": { d: "m185,110 l55,-5 l25,20 l-15,25 l-50,5 z", cx: 220, cy: 130, abbr: "MP", name: "Mpumalanga" },
+  "Limpopo": { d: "m150,50 l90,-5 l40,30 l-20,20 l-70,10 l-30,-25 z", cx: 200, cy: 70, abbr: "LP", name: "Limpopo" },
+  "Gauteng": { d: "m160,100 l35,-5 l5,25 l-40,5 z", cx: 180, cy: 112, abbr: "GP", name: "Gauteng" },
+  "North West": { d: "m95,80 l70,10 l15,25 l-30,15 l-45,-10 z", cx: 135, cy: 110, abbr: "NW", name: "North West" },
 };
 
 function SAMap({ selectedId, onProvinceClick }: { selectedId: string | null; onProvinceClick: (prov: string, firstId: string) => void }) {
-  const stateOf = (prov: string) => {
-    const ts = territories.filter((t) => t.province === prov);
-    if (ts.some((t) => t.state === "committed")) return "committed";
-    if (ts.some((t) => t.state === "discussion")) return "discussion";
-    return "available";
-  };
+  const stateOf = useMemo(() => {
+    const cache: Record<string, string> = {};
+    return (prov: string) => {
+      if (cache[prov]) return cache[prov];
+      const ts = territories.filter((t) => t.province === prov);
+      const result = ts.some((t) => t.state === "committed") ? "committed" : ts.some((t) => t.state === "discussion") ? "discussion" : "available";
+      cache[prov] = result;
+      return result;
+    };
+  }, []);
+
   const [hovered, setHovered] = useState<string | null>(null);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent, prov: string, firstId: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onProvinceClick(prov, firstId);
+    }
+  }, [onProvinceClick]);
+
   return (
-    <svg className="w-full h-auto" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+    <svg className="w-full h-auto" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of South Africa showing franchise territories by province">
       <defs>
         <pattern id="p" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
           <rect width="4" height="4" fill="transparent" />
@@ -41,16 +53,18 @@ function SAMap({ selectedId, onProvinceClick }: { selectedId: string | null; onP
       {Object.entries(SA_PATHS).map(([prov, { d, cx, cy, abbr }]) => {
         const cls = stateOf(prov);
         const sel = territories.some((t) => t.province === prov && t.id === selectedId);
+        const firstId = territories.find((t) => t.province === prov)?.id ?? "";
         return (
           <g
             key={prov}
-            onClick={() => {
-              const t = territories.find((t) => t.province === prov);
-              if (t) onProvinceClick(prov, t.id);
-            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`${prov}: ${territories.filter((t) => t.province === prov).length} territories. Press Enter to select.`}
+            onClick={() => onProvinceClick(prov, firstId)}
+            onKeyDown={(e) => handleKeyDown(e, prov, firstId)}
             onMouseEnter={() => setHovered(prov)}
             onMouseLeave={() => setHovered(null)}
-            className="cursor-pointer"
+            className="cursor-pointer focus:outline-none"
           >
             <path d={d} className={`sa-province ${cls} ${sel ? "selected" : ""}`} />
             <text
@@ -90,17 +104,27 @@ export default function InterestPage() {
   const [filterProvince, setFilterProvince] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", phone: "", consent: false });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const selected = territories.find((t) => t.id === selectedId);
-  const filtered = filterProvince ? territories.filter((t) => t.province === filterProvince) : territories;
+  const selected = useMemo(() => territories.find((t) => t.id === selectedId), [selectedId]);
+  const filtered = useMemo(() => filterProvince ? territories.filter((t) => t.province === filterProvince) : territories, [filterProvince]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleProvinceClick = useCallback((prov: string, firstId: string) => {
+    setFilterProvince(prov);
+    setSelectedId(firstId);
+  }, []);
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    if (form.consent && form.email) {
+    if (!form.consent || !form.email) return;
+    setIsSubmitting(true);
+    // Simulate async submission
+    setTimeout(() => {
       addPoints(10);
       setSubmitted(true);
-    }
-  };
+      setIsSubmitting(false);
+    }, 800);
+  }, [form, addPoints]);
 
   return (
     <section className="py-16 md:py-24">
@@ -111,9 +135,9 @@ export default function InterestPage() {
             <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)]">
               Find the gap
               <br />
-              <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">
+              <span className="text-[color:var(--color-pp-accent)] font-medium">
                 in your city.
-              </em>
+              </span>
             </h1>
             <p className="text-[19px] text-[color:var(--color-pp-mute)] max-w-[440px]">
               Every province is a palette. Green is open, amber is in conversation, navy is claimed. Click a province to drill down to territories.
@@ -122,14 +146,10 @@ export default function InterestPage() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Map */}
           <div className="relative bg-white rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] p-6 shadow-[var(--shadow-1)]">
             <SAMap
               selectedId={selectedId}
-              onProvinceClick={(prov, firstId) => {
-                setFilterProvince(prov);
-                setSelectedId(firstId);
-              }}
+              onProvinceClick={handleProvinceClick}
             />
             <div className="flex flex-wrap gap-4 mt-4">
               <div className="flex items-center gap-2 text-xs">
@@ -155,12 +175,11 @@ export default function InterestPage() {
             )}
           </div>
 
-          {/* Territory list */}
           <div className="bg-white rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] overflow-hidden shadow-[var(--shadow-1)]">
             <div className="px-4 py-3 font-[family-name:var(--font-mono)] text-[10px] uppercase tracking-[0.14em] text-[color:var(--color-pp-mute)] border-b border-[color:var(--color-pp-line)]">
               {filterProvince || "All provinces"} · {filtered.length}
             </div>
-            <div className="max-h-[400px] overflow-y-auto">
+            <div className="max-h-[400px] overflow-y-auto" role="region" aria-label="Territory list">
               {filtered.map((t) => (
                 <button
                   key={t.id}
@@ -190,7 +209,6 @@ export default function InterestPage() {
             </div>
           </div>
 
-          {/* Detail / Form */}
           <div className="bg-white rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] p-6 shadow-[var(--shadow-1)]">
             {!selected && !submitted && (
               <div className="text-center py-12 text-[color:var(--color-pp-mute)]">
@@ -255,24 +273,30 @@ export default function InterestPage() {
                 ) : (
                   <form onSubmit={handleSubmit}>
                     <div className="space-y-3">
+                      <label className="block text-sm font-medium">Full name</label>
                       <input
                         required
                         placeholder="Full name"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        aria-label="Full name"
                       />
+                      <label className="block text-sm font-medium">Email address</label>
                       <input
                         required
                         type="email"
                         placeholder="Email address"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        aria-label="Email address"
                       />
+                      <label className="block text-sm font-medium">Phone number</label>
                       <input
                         type="tel"
                         placeholder="Phone number"
                         value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        aria-label="Phone number"
                       />
                       <label className="flex items-start gap-3 text-xs text-[color:var(--color-pp-mute)]">
                         <input
@@ -288,9 +312,12 @@ export default function InterestPage() {
                       </label>
                       <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200"
+                        disabled={isSubmitting}
+                        className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200 disabled:opacity-60 disabled:translate-y-0 disabled:shadow-none"
                       >
-                        {selected.state === "discussion" ? (
+                        {isSubmitting ? (
+                          "Submitting..."
+                        ) : selected.state === "discussion" ? (
                           <>Join the waitlist <Users className="w-4 h-4" /></>
                         ) : (
                           <>Express interest <MapPin className="w-4 h-4" /></>
@@ -310,9 +337,9 @@ export default function InterestPage() {
                 <div className="kicker mb-4">Interest logged</div>
                 <h3 className="font-[family-name:var(--font-serif)] text-2xl mb-3">
                   Lead{" "}
-                  <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">
-                    #PP-{Math.floor(Math.random() * 9000 + 1000)}
-                  </em>{" "}
+                  <span className="text-[color:var(--color-pp-accent)] font-medium">
+                    #PP-{Math.floor(Date.now() / 1000) % 9000 + 1000}
+                  </span>{" "}
                   recorded.
                 </h3>
                 <p className="text-sm text-[color:var(--color-pp-mute)] mb-6">

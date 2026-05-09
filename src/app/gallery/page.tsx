@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Heart, TrendingUp, Award } from "lucide-react";
+import { ArrowRight, Heart, Award, TrendingUp } from "lucide-react";
 import Crest from "@/components/Crest";
 import { galleryCrests } from "@/lib/data";
 
@@ -29,6 +29,10 @@ export default function GalleryPage() {
 
   const showBadges = view === "top10" || view === "top50";
 
+  const handleVote = useCallback((name: string) => {
+    setVoted((prev) => ({ ...prev, [name]: !prev[name] }));
+  }, []);
+
   return (
     <section className="py-16 md:py-24">
       <div className="max-w-[1280px] mx-auto px-6">
@@ -38,9 +42,9 @@ export default function GalleryPage() {
           </div>
           <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)] mb-4">
             The leaderboard of{" "}
-            <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">
+            <span className="text-[color:var(--color-pp-accent)] font-medium">
               unclaimed cities.
-            </em>
+            </span>
           </h1>
           <p className="text-[19px] text-[color:var(--color-pp-mute)] max-w-[52ch]">
             Every crest here was made by a visitor who saw a gap. Vote for the ones you'd sign under. The leaders are the ones we start conversations with.
@@ -114,14 +118,14 @@ export default function GalleryPage() {
                 </div>
                 <div className="mt-3 flex items-center justify-between">
                   <button
-                    onClick={() =>
-                      setVoted((prev) => ({ ...prev, [c.name]: !prev[c.name] }))
-                    }
+                    onClick={() => handleVote(c.name)}
                     className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors duration-200 ${
                       voted[c.name]
                         ? "text-[color:var(--color-pp-error)]"
                         : "text-[color:var(--color-pp-ink)] hover:text-[color:var(--color-pp-error)]"
                     }`}
+                    aria-label={voted[c.name] ? `Remove vote for ${c.name}` : `Vote for ${c.name}`}
+                    aria-pressed={voted[c.name]}
                   >
                     <Heart
                       className={`w-4 h-4 ${voted[c.name] ? "fill-current" : ""}`}

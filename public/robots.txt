@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://papa-pasta.co.za/sitemap.xml

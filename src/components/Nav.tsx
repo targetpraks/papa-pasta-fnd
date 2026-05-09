@@ -56,7 +56,7 @@ export default function Nav() {
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
             <CrestMini style={{ width: 28, height: 34 }} className="transition-transform duration-200 group-hover:scale-105" />
-            <span className="font-[family-name:var(--font-playfair)] font-extrabold text-lg tracking-wide whitespace-nowrap transition-colors duration-200 group-hover:text-[color:var(--color-pp-tertiary)]">
+            <span className="font-[family-name:var(--font-serif)] font-extrabold text-lg tracking-wide whitespace-nowrap transition-colors duration-200 group-hover:text-[color:var(--color-pp-tertiary)]">
               Papa Pasta
             </span>
           </Link>

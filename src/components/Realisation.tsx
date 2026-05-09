@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { X, ArrowRight, Store, ShoppingBag, Coffee } from "lucide-react";
@@ -18,16 +19,65 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
   const out = crest.outline.hex;
   const inn = crest.inner.hex;
   const nm = crest.name || "Your crest";
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  // Focus trap
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!modal) return;
+
+    // Focus the close button initially
+    closeBtnRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusableElements = modal.querySelectorAll(
+        'button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstEl = focusableElements[0] as HTMLElement;
+      const lastEl = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      if (e.shiftKey && document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      } else if (!e.shiftKey && document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    // Prevent body scroll
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [onClose]);
 
   return (
     <motion.div
+      ref={modalRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="realisation-title"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-[rgba(10,22,40,0.92)] backdrop-blur-md p-6 overflow-y-auto"
     >
       <button
+        ref={closeBtnRef}
         onClick={onClose}
+        aria-label="Close realisation preview"
         className="absolute top-6 right-6 text-[color:var(--color-pp-cream)] text-sm font-medium hover:text-[color:var(--color-pp-tertiary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-pp-tertiary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgba(10,22,40,0.92)] rounded transition-colors"
       >
         <X className="w-5 h-5 inline mr-1" />
@@ -38,11 +88,11 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
         <div className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[rgba(245,230,200,0.5)] mb-3">
           The Realisation Moment™
         </div>
-        <h2 className="font-[family-name:var(--font-serif)] font-extrabold text-3xl md:text-4xl text-[color:var(--color-pp-cream)]">
+        <h2 id="realisation-title" className="font-[family-name:var(--font-serif)] font-extrabold text-3xl md:text-4xl text-[color:var(--color-pp-cream)]">
           This is{" "}
-          <em className="text-[color:var(--color-pp-tertiary)] not-italic font-medium">
+          <span className="text-[color:var(--color-pp-tertiary)] font-medium">
             {nm}
-          </em>
+          </span>
           .
           <br />
           This is how it shows up.
@@ -50,7 +100,6 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
       </div>
 
       <div className="flex flex-wrap items-end justify-center gap-6 md:gap-10 mb-8">
-        {/* Bag */}
         <div className="flex flex-col items-center gap-2">
           <div className="text-[10px] font-[family-name:var(--font-mono)] uppercase tracking-wider text-[rgba(245,230,200,0.5)] flex items-center gap-1">
             <ShoppingBag className="w-3 h-3" /> 01 · Takeaway bag
@@ -67,7 +116,6 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
           <div className="text-[11px] text-[rgba(245,230,200,0.5)]">Branded bag</div>
         </div>
 
-        {/* Cup */}
         <div className="flex flex-col items-center gap-2">
           <div className="text-[10px] font-[family-name:var(--font-mono)] uppercase tracking-wider text-[rgba(245,230,200,0.5)] flex items-center gap-1">
             <Coffee className="w-3 h-3" /> 02 · Cup sleeve
@@ -84,7 +132,6 @@ export default function Realisation({ crest, onClose }: { crest: CrestState; onC
           <div className="text-[11px] text-[rgba(245,230,200,0.5)]">Take-away cup</div>
         </div>
 
-        {/* Storefront */}
         <div className="flex flex-col items-center gap-2">
           <div className="text-[10px] font-[family-name:var(--font-mono)] uppercase tracking-wider text-[rgba(245,230,200,0.5)] flex items-center gap-1">
             <Store className="w-3 h-3" /> 03 · Storefront

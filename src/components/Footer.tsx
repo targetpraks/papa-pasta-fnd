@@ -34,7 +34,7 @@ export default function Footer() {
           <div className="lg:col-span-4">
             <div className="flex items-center gap-2.5 mb-5">
               <CrestMini style={{ width: 28, height: 36 }} />
-              <span className="font-[family-name:var(--font-playfair)] font-extrabold text-xl">Papa Pasta</span>
+              <span className="font-[family-name:var(--font-serif)] font-extrabold text-xl">Papa Pasta</span>
             </div>
             <p className="text-[15px] leading-relaxed text-[rgba(245,230,200,0.65)] max-w-[380px] mb-6">
               2 crew. 40sqm. 11-month payback. Fresh pasta QSR built for South African operators who want theatre, margin, and a crest of their own.
@@ -46,7 +46,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <h5 className="font-[family-name:var(--font-playfair)] font-bold text-base mb-5">Pages</h5>
+            <h5 className="font-[family-name:var(--font-serif)] font-bold text-base mb-5">Pages</h5>
             <ul className="space-y-3">
               {footerLinks.pages.map((l) => (
                 <li key={l.href + l.label}>
@@ -59,7 +59,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <h5 className="font-[family-name:var(--font-playfair)] font-bold text-base mb-5">Franchise</h5>
+            <h5 className="font-[family-name:var(--font-serif)] font-bold text-base mb-5">Franchise</h5>
             <ul className="space-y-3">
               {footerLinks.franchise.map((l, i) => (
                 <li key={l.href + l.label + i}>
@@ -72,7 +72,7 @@ export default function Footer() {
           </div>
 
           <div className="lg:col-span-4">
-            <h5 className="font-[family-name:var(--font-playfair)] font-bold text-base mb-3">Newsletter</h5>
+            <h5 className="font-[family-name:var(--font-serif)] font-bold text-base mb-3">Newsletter</h5>
             <p className="text-sm text-[rgba(245,230,200,0.55)] mb-5 max-w-[320px]">
               Territory updates, seasonal drops, and franchise news — no spam, no fluff.
             </p>

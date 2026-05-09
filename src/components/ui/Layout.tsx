@@ -24,13 +24,13 @@ export function SectionHeader({
   return (
     <div className={cn("mb-12", className)}>
       {kicker ? (
-        <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-pp-mute)] mb-6">
+        <div className="inline-flex items-center gap-2.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[color:var(--color-pp-mute)] mb-6">
           <span className="w-6 h-px bg-current" />
           {kicker}
         </div>
       ) : null}
       <div className="flex flex-col lg:flex-row lg:items-end gap-8">
-        <h1 className="font-[family-name:var(--font-playfair)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)]">
+        <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)]">
           {title}
         </h1>
         {description ? (

@@ -24,7 +24,7 @@ export default function Crest({
   style,
 }: CrestProps) {
   const svgStyle = size ? { ...style, width: size, height: "auto" } : style;
-  const uid = React.useMemo(() => idSeed || ("c" + Math.random().toString(36).slice(2, 8)), [idSeed]);
+  const uid = React.useMemo(() => idSeed || ("c" + Math.floor(Math.random() * 1e8).toString(36)), [idSeed]);
 
   return (
     <svg

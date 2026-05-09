@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Palette, Eye, Check } from "lucide-react";
@@ -102,16 +102,29 @@ export default function CreatePage() {
   const [crestName, setCrestName] = useState("");
   const [ctx, setCtx] = useState("light");
   const [showRealisation, setShowRealisation] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const swBg = [seasonPal.primary, seasonPal.secondary, seasonPal.accent, "#D4A017", "#E85C2A", "#7BC950"];
   const swText = ["#0A1628", "#1B3A4B", "#3A1F0A", "#8B4513", "#F5E6C8", "#FFFFFF"];
   const swInner = ["#F5E6C8", "#FFFFFF", "#FFD66E", "#E8D5B7", "#B8D4E3", "#FFD700"];
 
-  const onSave = () => {
+  const handleSave = useCallback(() => {
     addPoints(10);
     if (crestName) addPoints(5);
     setShowRealisation(true);
-  };
+  }, [addPoints, crestName]);
+
+  const handleLeadSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    if (!leadForm.email || !leadForm.consent) return;
+    setIsSubmitting(true);
+    setTimeout(() => {
+      addPoints(10);
+      setLeadSubmitted(true);
+      setStep(1);
+      setIsSubmitting(false);
+    }, 600);
+  }, [leadForm, addPoints]);
 
   const crestForRealisation = {
     bg: { hex: bg.hex },
@@ -153,41 +166,40 @@ export default function CreatePage() {
               <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(32px,4vw,56px)] mb-4">
                 A quiet handshake.
                 <br />
-                <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">Your details.</em>
+                <span className="text-[color:var(--color-pp-accent)] font-medium">Your details.</span>
               </h1>
               <p className="text-[19px] text-[color:var(--color-pp-mute)] mb-8">
                 We ask first so nothing is lost. Name, email, phone. Then the colour game.
               </p>
 
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (leadForm.email && leadForm.consent) {
-                    addPoints(10);
-                    setLeadSubmitted(true);
-                    setStep(1);
-                  }
-                }}
+                onSubmit={handleLeadSubmit}
                 className="text-left space-y-4 bg-white rounded-[var(--radius-xl)] border border-[color:var(--color-pp-line)] p-8 shadow-[var(--shadow-1)]"
               >
+                <label className="block text-sm font-medium">Full name</label>
                 <input
                   required
                   placeholder="Full name"
                   value={leadForm.name}
                   onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                  aria-label="Full name"
                 />
+                <label className="block text-sm font-medium">Email address</label>
                 <input
                   required
                   type="email"
                   placeholder="Email address"
                   value={leadForm.email}
                   onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
+                  aria-label="Email address"
                 />
+                <label className="block text-sm font-medium">Phone number</label>
                 <input
                   type="tel"
                   placeholder="Phone number"
                   value={leadForm.phone}
                   onChange={(e) => setLeadForm({ ...leadForm, phone: e.target.value })}
+                  aria-label="Phone number"
                 />
                 <label className="flex items-start gap-3 text-xs text-[color:var(--color-pp-mute)]">
                   <input
@@ -203,10 +215,12 @@ export default function CreatePage() {
                 </label>
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200"
+                  disabled={isSubmitting}
+                  className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200 disabled:opacity-60 disabled:translate-y-0 disabled:shadow-none"
                 >
-                  Save &amp; start the Creator
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmitting ? "Saving..." : (
+                    <>Save &amp; start the Creator <ArrowRight className="w-4 h-4" /></>
+                  )}
                 </button>
               </form>
               <p className="mt-4 text-xs text-[color:var(--color-pp-mute)]">
@@ -232,9 +246,9 @@ export default function CreatePage() {
               <div className="flex flex-col lg:flex-row lg:items-end gap-8">
                 <h1 className="font-[family-name:var(--font-serif)] font-extrabold tracking-[-0.035em] leading-[0.95] text-[clamp(36px,5vw,72px)]">
                   Build it until it{" "}
-                  <em className="text-[color:var(--color-pp-accent)] not-italic font-medium">
+                  <span className="text-[color:var(--color-pp-accent)] font-medium">
                     feels like yours.
-                  </em>
+                  </span>
                 </h1>
                 <p className="text-[19px] text-[color:var(--color-pp-mute)] max-w-[440px]">
                   Three regions. No presets. No wrong answers. Slide until your city looks back at you.
@@ -314,13 +328,14 @@ export default function CreatePage() {
                     onChange={(e) => setCrestName(e.target.value)}
                     maxLength={40}
                     placeholder="e.g. Joburg Sunset"
+                    aria-label="Crest name"
                   />
                   <p className="text-[11px] text-[color:var(--color-pp-mute)] mt-2">
                     Named crests can be submitted to the Community Gallery.
                   </p>
                 </div>
                 <button
-                  onClick={onSave}
+                  onClick={handleSave}
                   className="w-full inline-flex items-center justify-center gap-2.5 bg-[color:var(--color-pp-primary)] text-white px-6 py-3.5 rounded-[var(--radius-pill)] text-sm font-semibold hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(10,22,40,0.2)] transition-all duration-200"
                 >
                   <Check className="w-4 h-4" />
