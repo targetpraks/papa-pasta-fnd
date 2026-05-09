@@ -6,9 +6,9 @@ import Footer from "@/components/Footer";
 import LeadHud from "@/components/LeadHud";
 import { LeadProvider } from "@/components/LeadContext";
 
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap", weight: ["400","500","600"]});
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", display: "swap" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap", weight: ["400", "500", "600"] });
 
 export const metadata: Metadata = {
   title: "Papa Pasta — The Colour in Your City Hasn't Been Claimed Yet",
